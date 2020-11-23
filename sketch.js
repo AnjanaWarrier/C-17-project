@@ -2,7 +2,7 @@
 var monkey , monkey_running;
 var banana ,bananaImage, obstacle, obstacleImage;
 var FoodGroup, obstacleGroup;
-var score;
+var score=0;
 var ground;
 
 function preload(){
@@ -27,8 +27,8 @@ function setup() {
   ground = createSprite(200,380,400,10);
   ground.x = ground.width/2;
  
-  obstaclesGroup=createGroup();
-  FoodGroup=createGroup();
+  obstaclesGroup=new Group();
+  FoodGroup=new Group();
 }
 
 
@@ -36,13 +36,24 @@ function draw() {
   background("white");
 
   if(keyDown("space")) {
-        monkey.velocityY = -12;
-    }
+    monkey.velocityY = -12;
+  }
     
- 
-    monkey.velocityY = monkey.velocityY + 0.8;
+  monkey.velocityY = monkey.velocityY + 0.8;
   
-
+  if(obstaclesGroup.isTouching(monkey)){
+    monkey.velocityX=0;
+    obstaclesGroup.destroyEach();
+    FoodGroup.destroyEach();
+    ground.velocityX=0;
+  
+  }
+  
+  if(frameCount%60===0){
+    score=score+1;
+  }
+  
+ text("Score: "+score,200,50) ;
   
   monkey.collide(ground);
   monkey.collide(obstaclesGroup);
